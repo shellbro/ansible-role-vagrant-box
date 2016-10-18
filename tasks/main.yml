@@ -1,0 +1,39 @@
+---
+- name: install dependencies for modules used in this role
+  yum:
+    name: libselinux-python
+    state: latest
+
+- name: create vagrant user
+  user:
+    name: vagrant
+    password: $6$rounds=100000$KmsEfXaFYJCIYyKk$FyMq6B7YybdcE3ivaDvYHrY7hCCqTDUwqdBTxtgQYmgHjrhLzmBXhVDUv5rlLiiqMBgPCCh8mX0RPib03ji9f1
+
+- name: configure passwordless sudo for vagrant user
+  lineinfile:
+    dest: /etc/sudoers
+    line: "vagrant ALL=(ALL) NOPASSWD: ALL"
+    validate: visudo -cf %s
+
+- name: remove tty requirement for sudo
+  lineinfile:
+    dest: /etc/sudoers
+    regexp: ^Defaults.*requiretty$
+    state: absent
+    validate: visudo -cf %s
+
+- name: set up user's .ssh directory
+  file:
+    dest: /home/vagrant/.ssh
+    state: directory
+    owner: vagrant
+    group: vagrant
+    mode: 0700
+
+- name: download vagrant's insecure public key
+  get_url:
+    url: https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub
+    dest: /home/vagrant/.ssh/authorized_keys
+    owner: vagrant
+    group: vagrant
+    mode: 0600
