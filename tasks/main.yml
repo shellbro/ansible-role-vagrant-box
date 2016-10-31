@@ -2,7 +2,7 @@
 - name: install dependencies for modules used in this role
   yum:
     name: libselinux-python
-    state: latest
+    state: present
 
 - name: create vagrant user
   user:
@@ -37,3 +37,18 @@
     owner: vagrant
     group: vagrant
     mode: 0600
+
+- name: install dependencies for VBoxGuestAdditions
+  yum:
+    name: "@Development Tools"
+    state: present
+
+- name: mount VBoxGuestAdditions
+  mount:
+    name: /media/VBoxGuestAdditions
+    src: /root/VBoxGuestAdditions.iso
+    fstype: iso9660
+    state: mounted
+
+- name: install VBoxGuestAdditions
+  command: /media/VBoxGuestAdditions/VBoxLinuxAdditions.run --nox11
