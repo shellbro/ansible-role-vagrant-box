@@ -3,52 +3,51 @@
   yum:
     name: libselinux-python
     state: present
-
+  become: yes
 - name: create vagrant user
   user:
     name: vagrant
     password: $6$rounds=100000$KmsEfXaFYJCIYyKk$FyMq6B7YybdcE3ivaDvYHrY7hCCqTDUwqdBTxtgQYmgHjrhLzmBXhVDUv5rlLiiqMBgPCCh8mX0RPib03ji9f1
-
+  become: yes
 - name: configure passwordless sudo for vagrant user
   lineinfile:
-    dest: /etc/sudoers
+    path: /etc/sudoers
     line: "vagrant ALL=(ALL) NOPASSWD: ALL"
     validate: visudo -cf %s
-
+  become: yes
 - name: remove tty requirement for sudo
   lineinfile:
-    dest: /etc/sudoers
+    path: /etc/sudoers
     regexp: ^Defaults.*requiretty$
     state: absent
     validate: visudo -cf %s
-
-- name: set up user's .ssh directory
+  become: yes
+- name: "set up user's .ssh directory"
   file:
-    dest: /home/vagrant/.ssh
+    path: /home/vagrant/.ssh
     state: directory
     owner: vagrant
     group: vagrant
     mode: 0700
-
-- name: download vagrant's insecure public key
+- name: "download vagrant's insecure public key"
   get_url:
     url: https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub
     dest: /home/vagrant/.ssh/authorized_keys
     owner: vagrant
     group: vagrant
     mode: 0600
-
 - name: install dependencies for VBoxGuestAdditions
   yum:
     name: "@Development Tools"
     state: present
-
+  become: yes
 - name: mount VBoxGuestAdditions
   mount:
-    name: /media/VBoxGuestAdditions
+    path: /media/VBoxGuestAdditions
     src: /root/VBoxGuestAdditions.iso
     fstype: iso9660
     state: mounted
-
+  become: yes
 - name: install VBoxGuestAdditions
   command: /media/VBoxGuestAdditions/VBoxLinuxAdditions.run --nox11
+  become: yes
