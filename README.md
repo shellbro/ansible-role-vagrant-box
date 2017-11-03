@@ -1,5 +1,5 @@
 vagrant-box
-=========
+===========
 
 [![Build Status](https://travis-ci.org/shellbro/ansible-role-vagrant-box.svg?branch=master)](https://travis-ci.org/shellbro/ansible-role-vagrant-box)
 
