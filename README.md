@@ -26,7 +26,7 @@ Example Playbook
 
     - hosts: servers
       roles:
-         - shellbro.vagrant-box
+        - shellbro.vagrant-box
 
 License
 -------
