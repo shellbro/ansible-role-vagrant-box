@@ -12,7 +12,7 @@
 - name: configure passwordless sudo for vagrant user
   lineinfile:
     path: /etc/sudoers
-    line: "vagrant ALL=(ALL) NOPASSWD: ALL"
+    line: 'vagrant ALL=(ALL) NOPASSWD: ALL'
     validate: visudo -cf %s
   become: yes
 - name: remove tty requirement for sudo
@@ -38,7 +38,7 @@
     mode: 0600
 - name: install dependencies for VBoxGuestAdditions
   yum:
-    name: "@Development Tools"
+    name: '@Development Tools'
     state: present
   become: yes
 - name: mount VBoxGuestAdditions
